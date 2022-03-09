@@ -1,4 +1,11 @@
+
+using DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//to add dependency injection for DataConnection
+builder.Services.AddTransient<DataConnection>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

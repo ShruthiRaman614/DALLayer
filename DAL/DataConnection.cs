@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -11,12 +12,19 @@ namespace DAL
     public class DataConnection
     {
 
-        private IList<Product> Getproducts()
+        private string connectionstring;
+        IConfiguration _configuration;
+        public DataConnection(IConfiguration configuration)
         {
-            string ConnectionString = "data source=HPI-5CD1462PLJ\\SQLEXPRESS; initial catalog=EFCore4PM;Integrated Security=True;";
+            _configuration= configuration;
+            connectionstring = _configuration.GetConnectionString("DbConnection");
+        }
+        public IList<Product> Getproducts()
+        {
+            /*string ConnectionString = "data source=HPI-5CD1462PLJ\\SQLEXPRESS; initial catalog=EFCore4PM;Integrated Security=True;";*/
 
             List<Product> productList = new List<Product>();
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionstring))
             {
                 conn.Open();
                 SqlCommand sqlCommand = new SqlCommand("Select * from Products", conn);
@@ -46,12 +54,12 @@ namespace DAL
 
 
 
-        private IList<Category> GetCategories()
+        public IList<Category> GetCategories()
         {
-            string ConnectionString = "data source=HPI-5CD1462PLJ\\SQLEXPRESS; initial catalog=EFCore4PM;Integrated Security=True;";
+            
 
             List<Category> categoryList = new List<Category>();
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionstring))
             {
                 conn.Open();
                 SqlCommand sqlCommand = new SqlCommand("Select * from Category", conn);
@@ -79,9 +87,9 @@ namespace DAL
 
         public string InsertProducts(Product p)
         {
-            string ConnectionString = "data source=HPI-5CD1462PLJ\\SQLEXPRESS; initial catalog=EFCore4PM;Integrated Security=True;";
+            
             int rowsAffected;
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionstring))
             {
 
                 SqlCommand sqlCommand = new SqlCommand("SelectAllCustomers", conn);
@@ -117,12 +125,12 @@ namespace DAL
                 return "Insertion unsuccessful";
         }
 
-        private Product GetProducts(int id)
+        public Product GetProducts(int id)
         {
             Product p = null;
-            string ConnectionString = "data source=HPI-5CD1462PLJ\\SQLEXPRESS; initial catalog=EFCore4PM;Integrated Security=True;";
+           
 
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionstring))
             {
                 SqlCommand sqlCommand = new SqlCommand("GetProducts", conn);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -146,12 +154,12 @@ namespace DAL
             return p;
         }
 
-        private string DeleteProducts(int id)
+        public string DeleteProducts(int id)
         {
             int AffectedRows = 0;
-            string ConnectionString = "data source=HPI-5CD1462PLJ\\SQLEXPRESS; initial catalog=EFCore4PM;Integrated Security=True;";
+           
 
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionstring))
             {
                 SqlCommand sqlCommand = new SqlCommand("DeleteProductsById", conn);
 

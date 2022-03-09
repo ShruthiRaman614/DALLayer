@@ -5,11 +5,11 @@ namespace ADO.NETWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        DataConnection _connection;
 
-        public ProductController()
+        DataConnection _connection;
+        public ProductController(DataConnection connection)
         {
-            _connection = new DataConnection();
+           _connection = connection;
         }
        
         public IActionResult Index()
@@ -50,8 +50,10 @@ namespace ADO.NETWebApp.Controllers
         public IActionResult Delete(int id)
         {
             _connection.DeleteProducts(id);
+            if(ModelState.IsValid)
             ViewBag.Categories = _connection.GetCategories();
             var product = _connection.Getproducts();
+
             return View("Index",product);
         }
         
